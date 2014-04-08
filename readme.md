@@ -1,5 +1,5 @@
 
-h2. About KeyParty
+## About KeyParty
 
 KeyParty is a simple key-value store using JSON files for storage and written
 for PHP 5.4 and above.
@@ -12,7 +12,7 @@ $my_data = array('foo', 'bar');
 $keyparty->set('some_key', $my_data);
 ```
 
-h2. Installation and dependencies
+## Installation and dependencies
 
 KeyParty requires Pimple for dependency injection and Gaufrette for
 file system actions.
@@ -28,7 +28,7 @@ via Packagist.
 }
 ```
 
-h2. Usage
+## Usage
 
 ```php
 
