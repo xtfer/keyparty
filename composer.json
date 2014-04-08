@@ -1,0 +1,26 @@
+{
+  "name": "xtfer/keyparty",
+  "type": "library",
+  "description": "A key/value store using JSON files.",
+  "keywords": ["keyparty", "database", "json"],
+  "license": "GPLv3",
+  "authors": [
+    {
+      "name": "Chris Skene",
+      "email": "chris@xtfer.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.4.0",
+    "knplabs/gaufrette": "0.2.*@dev",
+    "pimple/pimple": "~1.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "4.0.*"
+  },
+  "autoload": {
+    "psr-0": {
+      "KeyParty": "src/"
+    }
+  }
+}
