@@ -1,8 +1,7 @@
 
 ## About KeyParty
 
-KeyParty is a simple key-value store using JSON files for storage and written
-for PHP 5.4 and above.
+KeyParty is a simple, pluggable key-value store wrapper for PHP 5.4 and above. It comes with a native KV store (or "jar") using JSON files.
 
 *Example:*
 
