@@ -43,7 +43,7 @@ via Packagist.
 ```
 {
 "require": {
-        "xtfer/keyparty": "1.0.*"
+        "xtfer/keyparty": "0.2.*"
     }
 }
 ```
