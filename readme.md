@@ -7,15 +7,35 @@ for PHP 5.4 and above.
 *Example:*
 
 ```php
-$keyparty = new \Keyparty\KeyParty('test');
+// Start KeyParty and add a JSON Jar to store data in.
+$keyparty = new \Keyparty\KeyParty()->addJar('test');
+
+// Create some data to store.
 $my_data = array('foo', 'bar');
-$keyparty->set('some_key', $my_data);
+
+// Set the data
+$keyparty->set('test', 'some_key', $my_data);
+
+// You can also do it this way...
+$jar = $keyparty->useJar('test');
+
+$jar->insert('some_key', $my_data);
+// or
+$jar->update('some_key', $my_data);
+// or
+$jar->upsert('some_key', $my_data);
+
+// Get your data back
+$result = $keyparty->get('test', 'some_key');
+// or
+$result = $jar->select('some_key');
+
 ```
 
 ## Installation and dependencies
 
-KeyParty requires Pimple for dependency injection and Gaufrette for
-file system actions.
+KeyParty requires Gaufrette, but only if you intend to use the default JSON
+storage. This is not required if you plan to write your own adapter.
 
 The easiest way to install all of these is using Composer. KeyParty is available
 via Packagist.
@@ -26,47 +46,4 @@ via Packagist.
         "xtfer/keyparty": "1.0.*"
     }
 }
-```
-
-## Usage
-
-```php
-
-use Keyparty\Keyparty;
-
-// Create an new Database file (equivalent to a table).
-$keyparty = new KeyParty('test');
-
-// Empty the database.
-$keyparty->emptyDatabase();
-
-// Test both get and set.
-$data = array(
-  'integer' => 1,
-  'float' => 1.34,
-  'string' => 'some string',
-  'array' => array('one', 'two', 'three'),
-  'object' => new \stdClass(),
-);
-
-// Write the data.
-$keyparty->set('1', $data);
-
-// Fetch it again.
-$item = $keyparty->get('1');
-
-// Change the value and add it again under a new key.
-$data['another_key'] = 'foo';
-
-// Write a new object.
-$keyparty->set('2', $data);
-
-// Get all the objects.
-$items = $keyparty->getKeys();
-
-// Delete the first object.
-$keyparty->delete('1');
-
-// Completely remove the database from the filesystem.
-$keyparty->removeDatabase();
 ```

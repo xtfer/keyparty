@@ -30,8 +30,11 @@ class KeyPartyTest extends \PHPUnit_Framework_TestCase {
    */
   protected function setUp() {
 
-    $system_path = getcwd();
-    $this->keyparty = new KeyParty('test', $system_path . '/../../../bin/test', 'json', FALSE);
+    $system_path = __DIR__;
+    $this->keyparty = new KeyParty($system_path . '/../../../bin/test');
+
+    $this->keyparty->addJar('test', 'json');
+    $this->keyparty->emptyJar('test');
   }
 
   /**
@@ -45,10 +48,8 @@ class KeyPartyTest extends \PHPUnit_Framework_TestCase {
    */
   public function test() {
 
-    // Tests flush and empty creation.
-    $this->keyparty->emptyDatabase();
-
-    $this->assertEmpty($this->keyparty->getKeys(), 'No items found');
+    $all = $this->keyparty->getAll('test');
+    $this->assertEmpty($all, 'No items found');
 
     // Test both get and set.
     $data = array(
@@ -61,26 +62,24 @@ class KeyPartyTest extends \PHPUnit_Framework_TestCase {
       'object' => new \stdClass(),
     );
 
-    $this->keyparty->set('1', $data);
+    $this->keyparty->set('test', 'a', $data);
 
-    $item = $this->keyparty->get('1');
+    $item = $this->keyparty->get('test', 'a');
 
     $this->assertArrayHasKey('integer', $item);
     $this->assertEquals($item['integer'], 1);
 
     // Test adding another key and getKeys.
-    $data['another_key'] = 'foo';
+    $this->keyparty->set('test', 'b', $data);
 
-    $this->keyparty->set('2', $data);
-
-    $items = $this->keyparty->getKeys();
+    $items = $this->keyparty->getAll('test');
 
     $this->assertEquals(2, count($items));
 
     // Test deletion.
-    $this->keyparty->delete('1');
+    $this->keyparty->remove('test', 'a');
 
-    $items = $this->keyparty->getKeys();
+    $items = $this->keyparty->getAll('test');
 
     $this->assertEquals(1, count($items));
   }
@@ -91,7 +90,7 @@ class KeyPartyTest extends \PHPUnit_Framework_TestCase {
   protected function tearDown() {
 
     try {
-      $this->keyparty->removeDatabase();
+      $this->keyparty->deleteJar('test');
     }
     catch(DeleteDatabaseException $e) {
       // Nothing to do. This exception is notify on accidental deletion.
