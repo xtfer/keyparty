@@ -33,7 +33,7 @@ interface JarInterface {
   /**
    * Delete a row from the table.
    *
-   * @param string $id
+   * @param string $identifier
    *   ID of the item to remove.
    *
    * @throws \RuntimeException
@@ -42,7 +42,7 @@ interface JarInterface {
    * @return bool
    *   TRUE on successful delete.
    */
-  public function delete($id);
+  public function delete($identifier);
 
   /**
    * Empty the jar.
@@ -127,4 +127,21 @@ interface JarInterface {
    *   TRUE on a successful write.
    */
   public function upsert($key, $row);
+
+  /**
+   * Write data to the database.
+   *
+   * @param string $table
+   *   Jar to get the key from.
+   * @param array $data
+   *   The data to write.
+   *
+   * @throws \Gaufrette\Exception\FileAlreadyExists
+   * @throws \RuntimeException
+   * @throws KeyPartyException
+   *
+   * @return int
+   *   Returns the number of bytes written.
+   */
+  public function writeData($table, $data);
 }

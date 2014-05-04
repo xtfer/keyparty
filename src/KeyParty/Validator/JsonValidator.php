@@ -38,6 +38,10 @@ class JsonValidator implements ValidatorInterface {
    */
   public function isValidKey($key) {
 
+    if (is_array($key) || is_object($key)) {
+      throw new InvalidKeyException('Objects and arrays cannot be used as keys.');
+    }
+
     // Check key length.
     $len = strlen($key);
 
