@@ -4,6 +4,26 @@
 KeyParty is a simple key-value store using JSON files for storage and written
 for PHP 5.4 and above.
 
+```php
+// Start KeyParty and add a JSON Jar to store data in.
+$keyparty = new \Keyparty\KeyParty()->addJar('test');
+
+// Create some data to store.
+$my_data = array('foo', 'bar');
+
+// Set the data
+$keyparty->set('test', 'some_key', $my_data);
+```
+
+## Features
+
+* Simple interface (get(), set(), empty() etc) for adding and removing data from KV stores
+* Swappable backends ("jars") (use multiple KV stores using the same interface)
+* Swappable caching and data validation backends
+* JSON flat-file KV store included
+
+## Full example
+
 *Example:*
 
 ```php
@@ -16,7 +36,13 @@ $my_data = array('foo', 'bar');
 // Set the data
 $keyparty->set('test', 'some_key', $my_data);
 
-// You can also do it this way...
+// Set data without overwriting existing data.
+// This will throw a RecordExistsException...
+$keyparty->set('test', 'some_key', $my_data);
+
+// You can also do it this way, however this won't use Object Converters, so you may 
+lose some functionality, such as the ability to return properly classed objects from
+the JSON store.
 $jar = $keyparty->useJar('test');
 
 $jar->insert('some_key', $my_data);
@@ -43,21 +69,28 @@ via Packagist.
 ```
 {
 "require": {
-        "xtfer/keyparty": "0.2.*"
+        "xtfer/keyparty": "0.3.*"
     }
 }
 ```
 
 ## About the JSON Jar
 
-By default, KeyParty will store your data in a flat-file JSON data store. This store is designed for rapid prototyping, simplicity, and portability. As such, it has some limitations:
+By default, KeyParty will store your data in a flat-file JSON data store. This store is designed for rapid prototyping, simplicity, and portability. 
+
+- Flat-file, one file per KV store.
+- Ability to store and recreate objects similar to PHP serialize(), when using the provided ObjectConverter (i.e. the default configuration)
+- Auto-creates KV stores on-the-fly
+
+The JSON Jar has some limitations:
+
 - Data is stored in files on disk, and is only cached per request. You shouldn't
 hit the disk twice for two reads on the same store (from the same KeyParty instance), but there is currently no other caching layer.
 - Every read loads the entire file
 - Every insert loads and writes the entire file
 - The store is not transaction safe. There is no logging and no roll-back.
 - JSON keys cannot be integers. There is no serial key concept. All items must have a valid non-integer key.
-- Objects are stored without object information, and are returned as stdClass(). If you want to return the original objects, you need to serialize them into a string first.
+
 
 ## Other Key-Value stores
 
