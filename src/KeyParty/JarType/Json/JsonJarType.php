@@ -7,53 +7,21 @@
 
 namespace KeyParty\JarType\Json;
 
-use KeyParty\Filesystem\GaufretteFactory;
+use KeyParty\JarType\JarTypeBase;
 use KeyParty\StoreAdapter\JsonStoreAdapter;
-use KeyParty\Cache\StaticCache;
 use KeyParty\JarType\JarTypeInterface;
 use KeyParty\Serializer\JsonSerializer;
 use KeyParty\Serializer\SerializerInterface;
 use KeyParty\Validator\JsonValidator;
 use KeyParty\Validator\ValidatorInterface;
-use KeyParty\Jar\Jar;
-use KeyParty\Filesystem\FilesystemFactoryInterface;
-use KeyParty\Cache\CacheInterface;
 use KeyParty\StoreAdapter\StoreAdapterInterface;
-use KeyParty\Jar\JarInterface;
 
 /**
  * Class JsonJarType
  *
  * @package KeyParty\JarType
  */
-class JsonJarType implements JarTypeInterface {
-
-  /**
-   * Get the GaufretteFactory.
-   *
-   * @return FilesystemFactoryInterface
-   *   A FilesystemFactoryInterface object.
-   */
-  public function getFilesystemFactory() {
-
-    return new GaufretteFactory();
-  }
-
-  /**
-   * Get the cache.
-   *
-   * @return CacheInterface
-   *   A Cache object
-   */
-  public function getCache() {
-
-    $is_caching = TRUE;
-    if (isset($this->options['cache'])) {
-      $is_caching = $this->options['cache'];
-    }
-
-    return new StaticCache($is_caching);
-  }
+class JsonJarType extends JarTypeBase implements JarTypeInterface {
 
   /**
    * Get the Serializer service.
@@ -91,19 +59,4 @@ class JsonJarType implements JarTypeInterface {
     return new JsonValidator();
   }
 
-  /**
-   * Create a table handler.
-   *
-   * @param string $jar_name
-   *   The jar name.
-   *
-   * @return JarInterface
-   *   A Jar object.
-   */
-  public function getJar($jar_name) {
-
-    $jar = new Jar($this, $jar_name);
-
-    return $jar;
-  }
 }
