@@ -76,6 +76,15 @@ class KeyParty {
 
     // Register the base JSON Jar.
     $this->registerJarType('json', 'KeyParty\\JarType\\Json\\JsonJarType');
+
+  /**
+   * Attach a converter.
+   *
+   * @param ConverterInterface $converter
+   *   An object implementing the converter interface.
+   */
+  public function attachConverter(ConverterInterface $converter) {
+    $this->converter = $converter;
   }
 
   /**
