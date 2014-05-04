@@ -286,6 +286,32 @@ class KeyParty {
   }
 
   /**
+   * Set a new key to store in the database.
+   *
+   * This will throw a RecordExistsException exception if the key already
+   * exists.
+   *
+   * @param string $table
+   *   Jar to get the key from.
+   * @param string $key
+   *   Key to use for the data
+   * @param mixed $data
+   *   the data to store
+   *
+   * @throws \KeyParty\Exception\RecordExistsException
+   * @return bool
+   *   successful set
+   */
+  public function setNew($table, $key, $data) {
+
+    if (isset($this->converter) && !empty($this->converter)) {
+      $data = $this->converter->toStore($data);
+    }
+
+    return $this->useJar($table)->insert($key, $data);
+  }
+
+  /**
    * Create a JarType.
    *
    * @param string $jar_type
