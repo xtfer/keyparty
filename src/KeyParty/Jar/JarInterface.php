@@ -33,7 +33,7 @@ interface JarInterface {
   /**
    * Delete a row from the table.
    *
-   * @param string $id
+   * @param string $identifier
    *   ID of the item to remove.
    *
    * @throws \RuntimeException
@@ -42,7 +42,7 @@ interface JarInterface {
    * @return bool
    *   TRUE on successful delete.
    */
-  public function delete($id);
+  public function delete($identifier);
 
   /**
    * Empty the jar.

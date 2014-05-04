@@ -93,7 +93,7 @@ class Jar implements JarInterface {
   /**
    * Delete a row from the table.
    *
-   * @param string $id
+   * @param string $identifier
    *   ID of the item to remove.
    *
    * @throws \RuntimeException
@@ -102,21 +102,21 @@ class Jar implements JarInterface {
    * @return bool
    *   TRUE on successful delete.
    */
-  public function delete($id) {
+  public function delete($identifier) {
 
     $result = FALSE;
 
-    $this->jarType->getValidator()->isValidKey($id);
+    $this->jarType->getValidator()->isValidKey($identifier);
 
     $table_data = $this->readData($this->name);
 
-    if (array_key_exists($id, $table_data)) {
+    if (array_key_exists($identifier, $table_data)) {
 
-      unset($table_data[$id]);
+      unset($table_data[$identifier]);
       $result = $this->writeData($this->name, $table_data);
 
       // Remove from cache.
-      $this->cache->remove($id);
+      $this->cache->remove($identifier);
     }
 
     return $result;
@@ -174,10 +174,12 @@ class Jar implements JarInterface {
   /**
    * Select a row from the table.
    *
-   * @param $key
+   * @param string $key
+   *   The key to select
    *
    * @throws KeyPartyException
    * @return mixed
+   *   Result.
    */
   public function select($key) {
 
@@ -317,12 +319,16 @@ class Jar implements JarInterface {
   /**
    * Handle the row write operation for insert, update and upsert.
    *
-   * @param $key
-   * @param $row
+   * @param string $key
+   *   Key of the row to write.
+   * @param array $row
+   *   The row value
    * @param bool $allow_overwrite
+   *   Whether to allow the row to be overwritten. Defaults to TRUE.
    *
    * @throws \KeyParty\Exception\KeyPartyException
    * @return bool
+   *   TRUE if the write succeeds.
    */
   protected function writeRow($key, $row, $allow_overwrite = TRUE) {
 
