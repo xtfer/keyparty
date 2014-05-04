@@ -32,6 +32,13 @@ class KeyParty {
   protected $dataDirectory;
 
   /**
+   * The createJars variable.
+   *
+   * @var bool
+   */
+  protected $createJars;
+
+  /**
    * KeyParty constructor.
    *
    * @param null|string $data_directory
@@ -233,5 +240,23 @@ class KeyParty {
     }
 
     return new $this->jarTypes[$jar_type]();
+  }
+
+  /**
+   * Determine if a Jar can be created.
+   *
+   * @param bool $default
+   *   An optional default value. Defaults to FALSE.
+   *
+   * @return bool
+   *   TRUE if the JAR can be created on the fly.
+   */
+  public function isCreatable($default = FALSE) {
+
+    if (isset($this->createJars)) {
+      return $this->createJars;
+    }
+
+    return $default;
   }
 }
