@@ -166,7 +166,7 @@ class Jar implements JarInterface {
    */
   public function insert($key, $row) {
 
-    $this->checkKey($row);
+    $this->checkKey($key);
 
     return $this->writeRow($key, $row, FALSE);
   }
