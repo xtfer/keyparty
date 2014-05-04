@@ -25,6 +25,8 @@ use KeyParty\JarType\JarTypeInterface;
  */
 class KeyParty {
 
+  const DEFAULT_JAR_TYPE = 'json';
+
   protected $jars;
 
   protected $jarTypes;
@@ -65,21 +67,23 @@ class KeyParty {
    * @param string $jar_type
    *   Type of jar. This must already have been registered with the
    *   registerJarType() sale. The default 'json' type is already available.
-   * @param bool $cache
-   *   Whether to activate caching for this jar.
+   * @param bool $is_creatable
+   *   (Optional) If TRUE, create the Jar if it doesn't exist. Defaults to FALSE
    *
    * @throws Exception\KeyPartyException
    *
    * @return JarInterface
    *   A Jar
    */
-  public function addJar($jar_name, $jar_type = 'json', $cache = TRUE) {
+  public function addJar($jar_name, $jar_type = KeyParty::DEFAULT_JAR_TYPE, $is_creatable = FALSE) {
 
     $jar_type = $this->createJarType($jar_type);
 
     $jar_type->getValidator()->isValidDatabaseName($jar_name);
 
-    $this->jars[$jar_name] = $jar_type->getJar($jar_name);
+    $jar = $jar_type->getJar($jar_name, $this->isCreatable($is_creatable));
+
+    $this->jars[$jar_name] = $jar;
 
     return $this->jars[$jar_name];
   }
