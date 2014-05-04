@@ -28,10 +28,25 @@ class KeyParty {
 
   const DEFAULT_JAR_TYPE = 'json';
 
+  /**
+   * The jars variable.
+   *
+   * @var JarInterface[]
+   */
   protected $jars;
 
+  /**
+   * The jarTypes variable.
+   *
+   * @var JarTypeInterface[]
+   */
   protected $jarTypes;
 
+  /**
+   * The dataDirectory variable.
+   *
+   * @var null|string
+   */
   protected $dataDirectory;
 
   /**
