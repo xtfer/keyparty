@@ -70,12 +70,16 @@ class KeyParty {
    *   (Optional) The directory to use. Can be either a relative path name
    *   starting from the current directory, or a full system path. Defaults
    *   to a directory called 'data' inside the current directory.
+   * @param bool $create_jars
+   *   If TRUE, Jars will be created if they don't exist. Defaults to FALSE.
    */
-  public function __construct($data_directory = 'data') {
+  public function __construct($data_directory = 'data', $create_jars = FALSE) {
     $this->dataDirectory = $data_directory;
+    $this->createJars = $create_jars;
 
     // Register the base JSON Jar.
-    $this->registerJarType('json', 'KeyParty\\JarType\\Json\\JsonJarType');
+    $this->registerJarType(KeyParty::DEFAULT_JAR_TYPE, 'KeyParty\\JarType\\Json\\JsonJarType');
+  }
 
   /**
    * Attach a converter.
@@ -125,15 +129,22 @@ class KeyParty {
    *
    * @param string $jar_name
    *   Name of the jar to use
+   * @param bool $is_creatable
+   *   (Optional) If TRUE, create the Jar if it doesn't exist. Defaults to FALSE
+   * @param string $jar_type
+   *   (Optional) If $create == TRUE, we need to know what kind of Jar to
+   *   create. This defaults to the built-in JSON store, but can be changed.
    *
    * @throws Exception\KeyPartyException
    *
    * @return JarInterface
    *   A Jar
    */
-  public function useJar($jar_name) {
+  public function useJar($jar_name, $is_creatable = FALSE, $jar_type = KeyParty::DEFAULT_JAR_TYPE) {
+
     if (!isset($this->jars[$jar_name])) {
-      throw new KeyPartyException('Invalid Jar requested.');
+
+      $this->addJar($jar_name, $jar_type, $is_creatable);
     }
 
     return $this->jars[$jar_name];
@@ -249,6 +260,8 @@ class KeyParty {
 
   /**
    * Set a key to store in the database.
+   *
+   * This will overwrite any existing key.
    *
    * @param string $table
    *   Jar to get the key from.
