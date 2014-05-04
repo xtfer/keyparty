@@ -9,6 +9,7 @@ namespace KeyParty\Jar;
 
 use KeyParty\Exception\InvalidKeyException;
 use KeyParty\Exception\KeyPartyException;
+use KeyParty\Exception\RecordExistsException;
 use KeyParty\JarType\JarTypeInterface;
 
 /**
@@ -335,7 +336,7 @@ class Jar implements JarInterface {
     $table_data = $this->selectAll();
 
     if ($allow_overwrite == FALSE && isset($table_data[$key])) {
-      throw new KeyPartyException('Cannot insert. Key exists');
+      throw new RecordExistsException(sprintf('A record already exists for %s', $key));
     }
 
     $table_data[$key] = $row;
