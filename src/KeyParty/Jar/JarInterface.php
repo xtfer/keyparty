@@ -127,4 +127,21 @@ interface JarInterface {
    *   TRUE on a successful write.
    */
   public function upsert($key, $row);
+
+  /**
+   * Write data to the database.
+   *
+   * @param string $table
+   *   Jar to get the key from.
+   * @param array $data
+   *   The data to write.
+   *
+   * @throws \Gaufrette\Exception\FileAlreadyExists
+   * @throws \RuntimeException
+   * @throws KeyPartyException
+   *
+   * @return int
+   *   Returns the number of bytes written.
+   */
+  public function writeData($table, $data);
 }

@@ -307,7 +307,7 @@ class Jar implements JarInterface {
    * @return int
    *   Returns the number of bytes written.
    */
-  protected function writeData($table, $data) {
+  public function writeData($table, $data) {
 
     // @todo
     // Allow options to be passed to json_encode().
