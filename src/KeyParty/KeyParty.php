@@ -11,6 +11,7 @@
 
 namespace KeyParty;
 
+use KeyParty\Converter\ConverterInterface;
 use KeyParty\Exception\KeyPartyException;
 use KeyParty\Jar\JarInterface;
 use KeyParty\JarType\JarTypeInterface;
@@ -39,6 +40,13 @@ class KeyParty {
    * @var bool
    */
   protected $createJars;
+
+  /**
+   * The converter variable.
+   *
+   * @var ConverterInterface
+   */
+  protected $converter;
 
   /**
    * KeyParty constructor.
@@ -183,7 +191,13 @@ class KeyParty {
    */
   public function get($jar_name, $key) {
 
-    return $this->useJar($jar_name)->select($key);
+    $data = $this->useJar($jar_name)->select($key);
+
+    if (isset($this->converter) && !empty($this->converter)) {
+      $data = $this->converter->fromStore($data);
+    }
+
+    return $data;
   }
 
   /**
@@ -198,7 +212,15 @@ class KeyParty {
    */
   public function getAll($jar_name) {
 
-    return $this->useJar($jar_name)->selectAll();
+    $datas = $this->useJar($jar_name)->selectAll();
+
+    if (isset($this->converter) && !empty($this->converter)) {
+      foreach ($datas as $key => $data) {
+        $datas[$key] = $this->converter->fromStore($data);
+      }
+    }
+
+    return $datas;
   }
 
   /**
@@ -218,6 +240,10 @@ class KeyParty {
    *   successful set
    */
   public function set($table, $key, $data) {
+
+    if (isset($this->converter) && !empty($this->converter)) {
+      $data = $this->converter->toStore($data);
+    }
 
     return $this->useJar($table)->upsert($key, $data);
   }
