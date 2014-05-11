@@ -344,12 +344,16 @@ class KeyParty {
    * @return bool
    *   TRUE if the JAR can be created on the fly.
    */
-  public function isCreatable($default = FALSE) {
+  public function isCreatable($default = NULL) {
+
+    if (!is_null($default)) {
+      return $default;
+    }
 
     if (isset($this->createJars)) {
       return $this->createJars;
     }
 
-    return $default;
+    return FALSE;
   }
 }
