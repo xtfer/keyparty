@@ -18,24 +18,8 @@ use KeyParty\KeyParty;
  */
 class KeyPartyTest extends \PHPUnit_Framework_TestCase {
 
-  /**
-   * The keyparty variable.
-   *
-   * @var \KeyParty\KeyParty
-   */
-  public $keyparty;
+  use CommonTestMethods;
 
-  /**
-   * {@inheritdoc}
-   */
-  protected function setUp() {
-
-    $system_path = __DIR__;
-    $this->keyparty = new KeyParty($system_path . '/../../../bin/test');
-
-    $this->keyparty->addJar('test', 'json');
-    $this->keyparty->emptyJar('test');
-  }
 
   /**
    * Main test method.
@@ -47,6 +31,9 @@ class KeyPartyTest extends \PHPUnit_Framework_TestCase {
    * @throws \PHPUnit_Framework_Exception
    */
   public function test() {
+
+    $this->keyparty->addJar('test', KeyParty::DEFAULT_JAR_TYPE, TRUE);
+    $this->keyparty->emptyJar('test');
 
     $all = $this->keyparty->getAll('test');
     $this->assertEmpty($all, 'No items found');
@@ -82,20 +69,6 @@ class KeyPartyTest extends \PHPUnit_Framework_TestCase {
     $items = $this->keyparty->getAll('test');
 
     $this->assertEquals(1, count($items));
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function tearDown() {
-
-    try {
-      $this->keyparty->deleteJar('test');
-    }
-    catch(DeleteDatabaseException $e) {
-      // Nothing to do. This exception is notify on accidental deletion.
-    }
-
   }
 
 }
