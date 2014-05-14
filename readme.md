@@ -21,6 +21,7 @@ $keyparty->set('test', 'some_key', $my_data);
 * Swappable backends ("jars") (use multiple KV stores using the same interface)
 * Swappable caching and data validation backends
 * JSON flat-file KV store included
+* Good test coverage
 
 ## Full example
 
